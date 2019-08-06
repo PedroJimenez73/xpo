@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>XPO Logistics Test</title>
+	<link rel="stylesheet" href="../shared/style.css">
+	<script src="../shared/js/jquery.min.js"></script>
+	<script src="../shared/scormfunctions.js" type="text/javascript"></script>
+</head>
+<body>
+	<div class="contenedor lesson condicional">
+		<div class="fila space">
+			<h1>Actividades</h1>
+			<button class="outline" onclick="parent.exitFullScreen();">
+				Salir
+			</button>
+		</div>
+		<div class="fila">
+			<div class="actividades mostrada" id="actividad-3">
+				<h2>3. Si alguna impresora se atasca, intentaremos siempre, en primer lugar, arreglarla nosotros mismos.</h2>
+				<hr>
+				<div class="respuesta">
+					<input type="radio" class="pregunta-3" id="tres-1" name="pregunta-3" value="no">
+					<label for="tres-1">a. Verdadero
+						<img src="../shared/img/x-circle.svg" alt="">
+					</label>
+				</div>
+				<div class="respuesta">
+					<input type="radio" class="pregunta-3" id="tres-2" name="pregunta-3" value="si">
+					<label for="tres-2">b. Falso
+						<img src="../shared/img/check-circle.svg" alt="">
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<nav>
+		<img src="../shared/img/xpo-logo-dark.svg" alt="">
+		<div>
+			<span class="mensaje verdadero condicional" id="msg-correcta">
+				¡La respuesta es correcta, continua a la siguiente!
+			</span>
+			<span class="mensaje falso condicional" id="msg-incorrecta">
+				Lo sentimos, la respuesta no es correcta, continua a la siguiente.
+			</span>
+			<button id="btn-3" class="outline condicional" onclick="checkAct3()">Comprobar respuesta</button>
+		</div>
+		<div>
+			<button onclick="parent.doPrevious()">
+				Ant
+			</button>
+			<span id="counter"></span>
+			<button id="btn-sig" onclick="parent.doNext()">
+				Sig
+			</button>
+		</div>
+	</nav>
+	<script>
+		document.getElementById('counter');
+		counter.innerHTML = (parent.currentPage + 1) + " / " + parent.pageArray.length;
+	</script>
+	<script>
+		var actividad3 = document.getElementById('actividad-3');
+		var inputs3 = document.querySelectorAll(".pregunta-3");
+		var resAct3;
+		var btn3 = document.getElementById('btn-3');
+		var btnSig = document.getElementById('btn-sig');
+		btn3.style.display = 'none';
+		btnSig.style.opacity = '0';
+		btnSig.style.pointerEvents = 'none';
+		msgCorrecta = document.getElementById('msg-correcta');
+		msgIncorrecta = document.getElementById('msg-incorrecta');
+		msgCorrecta.style.display = 'none';
+		msgIncorrecta.style.display = 'none';
+
+		if (localStorage.getItem('resAct3')){
+			btnSig.style.opacity = '1';
+			btnSig.style.pointerEvents = 'auto';
+			actividad3.style.pointerEvents = 'none';
+			resAct3 = JSON.parse(localStorage.getItem('resAct3'));
+			inputs3[resAct3.index].checked = 'true';
+			if (inputs3[resAct3.index].value === 'si') {
+				inputs3[resAct3.index].classList.add('verdadero');
+				msgCorrecta.style.display = 'block';
+				btn3.style.display = 'none';
+			} else {
+				inputs3[resAct3.index].classList.add('falso'); 
+				msgIncorrecta.style.display = 'block';
+				btn3.style.display = 'none';
+			}
+		}
+
+		for (i = 0; i < inputs3.length; i++) {
+			inputs3[i].addEventListener('click', function(){
+				btn3.style.display = 'inline';
+			});
+		}
+
+		function checkAct3() {
+			btnSig.style.opacity = '1';
+			btnSig.style.pointerEvents = 'auto';
+			msgCorrecta.style.display = 'none';
+			msgIncorrecta.style.display = 'none';
+			for (i = 0; i < inputs3.length; i++) {
+				inputs3[i].classList.remove('verdadero');
+				inputs3[i].classList.remove('falso');
+				if (inputs3[i].checked) {
+					if (inputs3[i].value === 'si') {
+						resAct3 = { index: i, passed3: true}
+						localStorage.setItem('resAct3', JSON.stringify(resAct3));
+						inputs3[i].classList.add('verdadero');
+						msgCorrecta.style.display = 'block';
+						btn3.style.display = 'none';
+						actividad3.style.pointerEvents = 'none';
+					} else {
+						resAct3 = { index: i, passed3: false }  
+						localStorage.setItem('resAct3', JSON.stringify(resAct3));
+						inputs3[i].classList.add('falso'); 
+						msgIncorrecta.style.display = 'block';
+						btn3.style.display = 'none';
+						actividad3.style.pointerEvents = 'none';
+					}
+				}
+			}
+		}
+
+	</script>
+</body>
+</html>

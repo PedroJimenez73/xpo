@@ -1,0 +1,105 @@
+.lesson {
+
+    &.condicional {
+        opacity: 0;
+        animation: fadein 0.7s ease-in-out forwards;
+    }
+
+    h1 {
+        font-size: 2.5em;
+        border-bottom: 1px solid $rojo;
+        color: rgb(28, 28, 28);
+    }
+
+    p {
+        font-size: 1.3em;
+    }
+}
+
+.evol {
+    @include flex(column, center, center);
+    width: 100%;
+    padding: 2em 2em 2em 1em;
+
+    .fader {
+        width: 100%;
+        display: none;
+    }
+
+    .fila-hex {
+        background-image: url('../../../shared/img/fondo-gris.svg');
+        background-repeat: no-repeat;
+        background-size: 100px;
+        background-position: center;
+        
+        .hexagon {
+            position: relative;
+            width: 80px; 
+            height: 46.19px;
+            background-color: #ffffff;
+            margin: 23.09px 0;
+            border-left: solid 4px $rojo;
+            border-right: solid 4px $rojo;
+            @include flex(row, center, center);
+
+            span {
+                font-family: $titulo;
+                color: $gris-oscuro;
+                font-size: 2em;
+                z-index: 10;
+            }
+        }
+          
+        .hexagon:before,
+        .hexagon:after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            width: 56.57px;
+            height: 56.57px;
+            -webkit-transform: scaleY(0.5774) rotate(-45deg);
+            -ms-transform: scaleY(0.5774) rotate(-45deg);
+            transform: scaleY(0.5774) rotate(-45deg);
+            background-color: inherit;
+            left: 7.7157px;
+        }
+          
+        .hexagon:before {
+            top: -28.2843px;
+            border-top: solid 5.6569px $rojo;
+            border-right: solid 5.6569px $rojo;
+        }
+          
+        .hexagon:after {
+            bottom: -28.2843px;
+            border-bottom: solid 5.6569px $rojo;
+            border-left: solid 5.6569px $rojo;
+        }
+
+        .texto {
+            width: calc(50% - 80px);
+            color: white;
+            background-color: $rojo;
+            padding: 0.5em 1em;
+        }
+    }
+
+    .fila-hex.odd {
+        width: 100%;
+        @include flex(row, flex-start, center);
+    }
+
+    .fila-hex.even {
+        width: 100%;
+        @include flex(row, flex-end, center);
+    }
+
+}
+
+@media (max-width: 920px) {
+    .evol .fila-hex .texto {
+        width: calc(100% - 80px);
+    }
+}
+
+

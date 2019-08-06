@@ -1,0 +1,49 @@
+.tabs {
+	max-width: 60rem;
+    display: flex;
+    align-items: center;
+	
+	> .ul-tabs {
+		list-style-type: none;
+		padding: 0;
+
+		.li-tabs {
+			display: block;
+			text-align: center;
+			
+			.a-tabs {
+				display: block;
+				text-decoration: none;
+                background: $gris;
+                font-size: 1.3em;
+                color: white;
+				padding: 0.6em 1em;
+				transition: all .2s ease-in-out;
+				
+				&.active {
+					background: $gris-claro;;
+					color: $rojo;
+				}
+				
+				&:hover:not(.active) {
+					color: $rojo;
+				}
+			}
+		}
+	}
+	
+	.section-tabs {
+        min-height: 340px;
+		background: $gris-claro;
+        display: none;
+        padding: 1em;
+		
+		&.active {
+			display: block;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+        }
+	}
+}

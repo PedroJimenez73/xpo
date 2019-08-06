@@ -1,0 +1,59 @@
+ol {
+    margin: 20px 0 20px 20px;
+    list-style: none;
+    counter-reset: my-awesome-counter;
+}
+
+ol.gigante li {
+    counter-increment: my-awesome-counter;
+    margin: 10px;
+    font-size: 20px;
+    line-height: 2;
+    margin: 20px 0;
+    font-weight: 300;
+}
+
+ol.gigante > li::before {
+    content: counter(my-awesome-counter);
+    background: $rojo;
+    width: 40px;
+    height: 40px;
+    border-radius: 60%;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    margin-right: 15px;
+}
+
+.fake-disc {
+    background: $rojo;
+    width: 36px;
+    height: 36px;
+    border-radius: 60%;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    margin-right: 15px;
+}
+
+ul {
+    list-style: none;
+    margin-left: 80px;
+}
+
+ul li.disco {
+    font-size: 1.3em;
+    margin: 20px 0;
+    position: relative;
+}
+
+ul li.disco::before {
+    content: "\2022";  
+    color: $rojo; 
+    font-weight: bold; 
+    font-size: 3em;
+    position: absolute;
+    width: 80px;
+    top: -25px;
+    left: -30px;
+}

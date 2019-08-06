@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.layout {
+    display: flex;
+}
+
+.palabras {
+    border: 3px dotted $gris;
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+    margin: 0 1em 1em 0;
+}
+
+.palabra {
+    text-align: center;
+    background-color: white;
+    color: $azul;
+    border: 1px solid $azul;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    margin: 5px;
+    z-index: 2;
+}
+
+#mesa {
+    width: 75%;
+    background-image: url('../../../shared/img/mesa.jpg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: relative;
+}
+
+@media (max-width: 960px) {
+
+    .layout {
+        flex-direction: column;
+    }
+
+    .palabras {
+        border: 3px dotted $gris;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-height: 150px;
+        flex-wrap: wrap;
+        margin: 0 0 1em;
+    }
+
+    #mesa {
+        width: 100%;
+    }
+
+    .palabra {
+        font-size: 0.8em;
+        padding: 0.3em 0.5em;
+    } 
+
+}
+
+.sprite {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: absolute;
+}
+
+.sprite.success {
+    background-color: rgba(255, 255, 255, 0.8);
+    background-image: url('../../../shared/img/check-circle.svg');
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+}
+
+.sprite.fail {
+    background-color: rgba(255, 255, 255, 0.8);
+    background-image: url('../../../shared/img/x-circle.svg');
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+}
+
+#monitor {
+    width: 16.25%;
+    height: 12.50%;
+    top: 11%;
+    left: 63%;
+}
+
+#teclado {
+    width: 16.25%;
+    height: 10%;
+    top: 23.5%;
+    left: 63%;
+}
+
+#papel {
+    width: 18%; /* 270 1522  */
+    height: 22%; /* 250  1044 */
+    top: 2%; /* 20 */
+    left: 23%;  /* 352 */
+}
+
+#engomadora {
+    width: 17%; /* 265 1522  */
+    height: 18%; /* 195  1044 */
+    top: 12%; /* 150 */
+    left: 6%;  /* 90 */
+}
+
+#cons-peq {
+    width: 25%; /* 385 1522  */
+    height: 27%; /* 295  1044 */
+    top: 32%; /* 370 */
+    left: 0;  /* 0 */
+}
+
+#impr-expe {
+    width: 17%; /* 260 1522  */
+    height: 18%; /* 210  1044 */
+    top: 31%; /* 350 */
+    left: 31%;  /* 470 */
+}
+
+#impr-fras {
+    width: 18%; /* 260 1522  */
+    height: 26%; /* 290  1044 */
+    top: 54%; /* 620 */
+    left: 49%;  /* 754 */
+}
+
+#escaner {
+    width: 7%; /* 100 1522  */
+    height: 12%; /* 150  1044 */
+    top: 36%; /* 400 */
+    left: 72%;  /* 1100 */
+}
+
+#cons-gra {
+    width: 15%; /* 230 1522  */
+    height: 26%; /* 300  1044 */
+    top: 55%; /* 500 */
+    left: 34%;  /* 620 */
+}
+
+#cinta {
+    width: 21%; /* 230 1522  */
+    height: 16%; /* 300  1044 */
+    top: 35%; /* 500 */
+    left: 79%;  /* 620 */
+}
+
+.sprite.dropping {
+    background-color: rgba(128, 128, 128, 0.60);
+}
+
+.sprite.dropped {
+    background-color: rgba(94, 94, 94, 0.831);
+}

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>XPO Logistics Test</title>
+	<link rel="stylesheet" href="../shared/style.css">
+	<script src="../shared/js/jquery.min.js"></script>
+    <script src="../shared/js/jquery-ui.min.js"></script>
+    <script src="../shared/js/jquery-punch.js"></script>
+	<script src="../shared/scormfunctions.js" type="text/javascript"></script>
+</head>
+<body>
+	<div class="contenedor lesson condicional">
+		<div class="fila space">
+			<h1>Actividades</h1>
+			<button class="outline" onclick="parent.exitFullScreen();">
+				Salir
+			</button>
+		</div>
+		<div class="fila">
+			<div class="actividades mostrada">
+				<h2>1. Arrastra el nombre de cada elemento allí donde lo identifiques en la mesa de packing estándar.</h2>
+				<hr>
+				<div class="layout">
+					<div class="palabras" ondrop="drop(event)" ondragover="allowDrop(event)">
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-monitor">
+							Monitor
+						</div>
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-engomadora">
+							Engomadora
+						</div>
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-impr-expe">
+							Impresora de expedición <br> de etiquetas
+						</div>
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-cinta">
+							Cinta transportadora
+						</div>
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-escaner">
+							Escáner
+						</div>
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-teclado">
+							Teclado
+						</div>
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-cons-peq">
+							Consumibles pequeños
+						</div>
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-papel">
+							Papel de relleno
+						</div>
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-impr-fras">
+							Impresora de facturas
+						</div>
+						<div class="palabra" draggable="true" ondragstart="drag(event)" id="texto-cons-gra">
+							Consumibles grandes
+						</div>
+					</div>
+					<div id="mesa">
+						<div class="sprite" id="cinta" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+						<div class="sprite" id="cons-gra" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+						<div class="sprite" id="cons-peq" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+						<div class="sprite" id="engomadora" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+						<div class="sprite" id="escaner" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+						<div class="sprite" id="impr-expe" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+						<div class="sprite" id="impr-fras" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+						<div class="sprite" id="monitor" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+						<div class="sprite" id="papel" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+						<div class="sprite" id="teclado" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+					</div> 
+				</div>
+			</div>
+		</div>
+	</div>
+	<nav>
+		<img src="../shared/img/xpo-logo-dark.svg" alt="">
+		<div>
+			<span class="mensaje verdadero condicional" id="msg-correcta">
+				¡La respuesta es correcta, continua a la siguiente!
+			</span>
+			<span class="mensaje falso condicional" id="msg-incorrecta">
+				Lo sentimos has cometido <span id="fallos"></span> fallos, continua a la siguiente.
+			</span>
+			<button id="btn-1" class="outline condicional" onclick="checkAct1()">Comprobar respuesta</button>
+		</div>
+		<div>
+			<button onclick="parent.doPrevious()">
+				Ant
+			</button>
+			<span id="counter"></span>
+			<button id="btn-sig" onclick="parent.doNext()">
+				Sig
+			</button>
+		</div>
+	</nav>
+	<script>
+		document.getElementById('counter');
+		counter.innerHTML = (parent.currentPage + 1) + " / " + parent.pageArray.length;
+	</script>
+	 <script>
+		$(document).ready(function() {
+			var ancho = $('#mesa').outerWidth();
+			var alto = (ancho * 1198) / 1600;
+			$('#mesa').outerHeight(alto);
+		})
+	</script>
+	<script>
+		var mesa = document.getElementById('mesa');
+		var sprites = document.querySelectorAll('.sprite');
+		var act1 = [];
+		var resAct1 = [];
+		var passed1;
+		var btn1 = document.getElementById('btn-1');
+		var btnSig = document.getElementById('btn-sig');
+		btn1.style.display = 'none';
+		btnSig.style.opacity = '0';
+		btnSig.style.pointerEvents = 'none';
+		msgCorrecta = document.getElementById('msg-correcta');
+		msgIncorrecta = document.getElementById('msg-incorrecta');
+		fallos = document.getElementById('fallos');
+		contFallos = 0;
+		msgCorrecta.style.display = 'none';
+		msgIncorrecta.style.display = 'none';
+
+		if(localStorage.getItem('act1')){
+			mesa.style.pointerEvents = 'none';
+			btnSig.style.opacity = '1';
+			btnSig.style.pointerEvents = 'auto';
+			act1 = JSON.parse(localStorage.getItem('act1'));
+			resAct1 = JSON.parse(localStorage.getItem('resAct1'));
+			passed1 = JSON.parse(localStorage.getItem('passed1'));
+			contFallos = JSON.parse(localStorage.getItem('contFallos'));
+			if(passed1){
+				msgCorrecta.style.display = 'inline';
+			}
+			if(!passed1){
+				msgIncorrecta.style.display = 'inline';	
+				fallos.innerHTML = contFallos;
+			}
+			for (i=0; i < sprites.length; i++){
+				sprites[i].appendChild(document.getElementById('texto-' + act1[i].drag));
+			}
+			$('.sprite').each(
+				function(index) {
+					$(this).removeClass('dropping');
+					$(this).removeClass('dropped');
+					$(this).removeClass('success');
+					$(this).removeClass('fail');
+					if(resAct1[index]) {
+						$(this).addClass('success');
+					} else {
+						$(this).addClass('fail');
+					}
+				}
+			);;
+		}
+
+		function drag(ev) {
+			ev.dataTransfer.setData("text", ev.target.id);
+		}
+
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
+
+		function drop(ev) {
+			act1 = [];
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("text");
+			ev.target.appendChild(document.getElementById(data));
+			for (i=0; i < sprites.length; i++){
+				if(sprites[i].firstElementChild !== null){
+					act1.push({drop: sprites[i].getAttribute('id'), drag: sprites[i].firstElementChild.getAttribute('id').slice(6)});
+				}
+			}
+			if(act1.length === sprites.length) {
+				msgCorrecta.style.display = 'none';
+				msgIncorrecta.style.display = 'none';
+				btn1.style.display = 'inline';
+			}
+			// act1.sort(function(a, b){
+			// 	if (a.drop < b.drop) {
+			// 		return -1 
+			// 	} else if (a.drop > b.drop) {
+			// 		return 1
+			// 	}
+			// });
+		}
+
+		document.addEventListener("dragover", function( event ) {
+			// prevent default to allow drop
+			event.preventDefault();
+			$(event.target).addClass("dropping"); 
+		}, false);
+		document.addEventListener("dragleave", function( event ) {
+			// prevent default to allow drop
+			event.preventDefault();
+			$(event.target).removeClass("dropping"); 
+		}, false);
+		document.addEventListener("drop", function( event ) {
+			// prevent default to allow drop
+			event.preventDefault();
+			$(event.target).addClass("dropped"); 
+		}, false);
+
+		function checkAct1(){
+			mesa.style.pointerEvents = 'none';
+			btn1.style.display = 'none';
+			btnSig.style.opacity = '1';
+			btnSig.style.pointerEvents = 'auto';
+			resAct1 = [];
+			msgCorrecta.style.display = 'none';
+			msgIncorrecta.style.display = 'none';
+			contFallos = 0;
+			for(i=0; i < act1.length; i++) {
+				if(act1[i].drop === act1[i].drag) {
+					resAct1.push(true);
+				} else {
+					resAct1.push(false);
+					contFallos++;
+				}
+			}
+			localStorage.setItem('act1', JSON.stringify(act1));
+			localStorage.setItem('resAct1', JSON.stringify(resAct1));
+			passed1 = resAct1.every( function(elem){return elem === true});
+			passed1 = true ? passed1 : false;
+			if(passed1){
+				msgCorrecta.style.display = 'inline';
+			}
+			if(!passed1){
+				msgIncorrecta.style.display = 'inline';	
+				fallos.innerHTML = contFallos;
+			}
+			localStorage.setItem('contFallos', JSON.stringify(contFallos));
+			localStorage.setItem('passed1', JSON.stringify(passed1));
+			$('.sprite').each(
+				function(index) {
+					$(this).removeClass('dropping');
+					$(this).removeClass('dropped');
+					$(this).removeClass('success');
+					$(this).removeClass('fail');
+					if(resAct1[index]) {
+						$(this).addClass('success');
+					} else {
+						$(this).addClass('fail');
+					}
+				}
+			);;
+		}
+	</script>
+	<script>
+		// Drag & drop para táctiles
+
+		// $(function() {
+		//     $( "#texto-monitor" ).draggable();
+		//     $( "#monitor" ).droppable({
+		//         drop: function( event, ui ) {
+		//         $( this )
+		//             .addClass( "dropping" )
+		//         }
+		//     });
+		// });
+
+	</script>
+</body>
+</html>

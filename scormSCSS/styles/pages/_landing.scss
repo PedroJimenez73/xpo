@@ -1,0 +1,50 @@
+.fondo-portada {
+    background-image:url('../../shared/img/portada.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    @include flex(row, flex-end, flex-end);
+    padding: 2em 2em 5em;
+    position: relative;
+
+    // video {
+    //     width: 100%;
+    //     height: 100%;
+    //     overflow: hidden;
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    // }
+
+    .caja-portada {
+        background-color: $gris-oscuro-80;
+        padding: 2em;
+        @include flex(column, flex-end, flex-end);
+    }
+    
+    .caja-portada h1 {
+        width: 100%;
+        font-size: 3em;
+        font-weight: 400;
+        color: white;
+        line-height: 1.3em;
+        margin-bottom: 0.5em;
+    } 
+
+}
+
+
+@media (max-width: 540px) {
+
+    .caja-portada {
+        width: 100%;
+    }
+    
+    .caja-portada h1 {
+        font-size: 32px;
+
+    } 
+}

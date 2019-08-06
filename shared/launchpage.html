@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>XPO Logistics Test</title>
+    <script src="js/jquery.min.js"></script>
+    <script src="scormfunctions.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="doStart(false);" onbeforeunload="doUnload(false);" onunload="doUnload();">
+
+
+
+    <iframe style="width: 100%; height: 100vh" id="contentFrame" src="" frameBorder="0" allowfullscreen></iframe>
+
+
+    <script type="text/javascript">
+    
+    /*************************************/
+    //functions for sizing the iFrame
+    /*************************************/
+    function setIframeHeight(id, navWidth) {
+        if ( document.getElementById ) {
+            var theIframe = document.getElementById(id);
+            if (theIframe) {
+                var height = getWindowHeight();
+                theIframe.style.height = Math.round( height ) - navWidth + "px";
+                theIframe.style.marginTop = Math.round( ((height - navWidth) - parseInt(theIframe.style.height) )/2 ) + "px";
+            }
+        }
+    }
+
+    function getWindowHeight() {
+        var height = 0;
+        if (window.innerHeight){
+            height = window.innerHeight - 18;
+        }
+        else if (document.documentElement && document.documentElement.clientHeight){
+            height = document.documentElement.clientHeight;
+        }
+        else if (document.body && document.body.clientHeight) {
+            height = document.body.clientHeight;
+        }
+        return height;
+    }
+    
+    function SetupIFrame(){
+        //set our iFrame for the content to take up the full screen except for our navigation
+        var navWidth = 40;
+        setIframeHeight("contentFrame", navWidth);
+        //need this in a setTimeout to avoid a timing error in IE6
+        window.setTimeout('window.onresize = function() { setIframeHeight("contentFrame", ' + navWidth + '); }', 1000);
+    }
+    
+    /*************************************/
+    //content definition
+    /*************************************/
+    var pageArray = [
+        
+        "contenido/portada.html",
+        "contenido/cont1.html",
+        "contenido/cont2.html",
+        "contenido/cont3.html",
+        "contenido/cont4.html",
+        "contenido/cont5.html",
+        "contenido/cont6.html",
+        // "contenido/cont7.html",
+        // "contenido/cont8.html",
+        // "contenido/cont9.html",
+        // "contenido/cont10.html",
+        // "contenido/cont11.html",
+        // "contenido/cont12.html",
+    ]
+    
+        
+    /*************************************/
+    //navigation functions
+    /*************************************/
+    
+    var currentPage = null;
+    var startTimeStamp = null;
+    var processedUnload = false;
+    var reachedEnd = false;
+    var btnAnt // = document.getElementById('btn-ant');
+    var counter // = document.getElementById('counter');
+    var btnSig // = document.getElementById('btn-sig');
+    
+    function doStart(){
+        
+        //get the iFrame sized correctly and set up
+        // SetupIFrame();
+        
+        //record the time that the learner started the SCO so that we can report the total time
+        startTimeStamp = new Date();
+        
+        //initialize communication with the LMS
+        ScormProcessInitialize();
+        
+        //it's a best practice to set the lesson status to incomplete when
+        //first launching the course (if the course is not already completed)
+        var completionStatus = ScormProcessGetValue("cmi.core.lesson_status");
+        if (completionStatus == "not attempted"){
+            ScormProcessSetValue("cmi.core.lesson_status", "incomplete");
+        }
+        
+        //see if the user stored a bookmark previously (don't check for errors
+        //because cmi.core.lesson_location may not be initialized
+        var bookmark = ScormProcessGetValue("cmi.core.lesson_location");
+        
+        //if there isn't a stored bookmark, start the user at the first page
+        if (!bookmark){
+            currentPage = 0;
+        }
+        else{
+            //if there is a stored bookmark, prompt the user to resume from the previous location
+            if (confirm("¿Desea continuar donde lo dejó en la anterior sesión?")){
+                currentPage = parseInt(bookmark, 10);
+            }
+            else{
+                currentPage = 0;
+            }
+        }
+        
+        goToPage();
+    }
+
+    function goFromMenu(e) {
+        currentPage = e;
+        goToPage();
+    }
+    
+    function goToPage(){
+    
+        var theIframe = document.getElementById("contentFrame");
+
+        // 
+
+        // if (currentPage === 0){
+        //     btnAnt.style.opacity = 0;
+        //     btnAnt.style.pointerEvents = 'none';
+        //     btnSig.style.opacity = 1;
+        //     btnSig.style.pointerEvents = 'auto';
+        // } else if (currentPage === (pageArray.length - 1)){
+        //     btnAnt.style.opacity = 1;
+        //     btnAnt.style.pointerEvents = 'auto';
+        //     btnSig.style.opacity = 0;
+        //     btnSig.style.pointerEvents = 'none';
+        // } else {
+        //     btnAnt.style.opacity = 1;
+        //     btnAnt.style.pointerEvents = 'auto';
+        //     btnSig.style.opacity = 1;
+        //     btnSig.style.pointerEvents = 'auto';
+        // }
+        
+        //navigate the iFrame to the content
+        theIframe.src = "../" + pageArray[currentPage];
+        
+        
+        //save the current location as the bookmark
+        ScormProcessSetValue("cmi.core.lesson_location", currentPage);
+        
+        //in this sample course, the course is considered complete when the last page is reached
+        if (currentPage == (pageArray.length - 1)){
+            reachedEnd = true;
+            ScormProcessSetValue("cmi.core.lesson_status", "completed");
+        }
+    }
+    
+    function doUnload(pressedExit){
+        
+        //don't call this function twice
+        if (processedUnload == true){return;}
+        
+        processedUnload = true;
+        
+        //record the session time
+        var endTimeStamp = new Date();
+        var totalMilliseconds = (endTimeStamp.getTime() - startTimeStamp.getTime());
+        var scormTime = ConvertMilliSecondsToSCORMTime(totalMilliseconds, false);
+        
+        ScormProcessSetValue("cmi.core.session_time", scormTime);
+        
+        //if the user just closes the browser, we will default to saving 
+        //their progress data. If the user presses exit, he is prompted.
+        //If the user reached the end, the exit normall to submit results.
+        if (pressedExit == false && reachedEnd == false){
+            ScormProcessSetValue("cmi.core.exit", "suspend");
+        }
+        
+        ScormProcessFinish();
+    }
+    
+    function doPrevious(){
+        if (currentPage > 0){
+            currentPage--;
+        }
+        goToPage();
+    }
+    
+    function doNext(){
+        if (currentPage < (pageArray.length - 1)){
+            currentPage++;
+        }
+        goToPage();
+    }
+
+    function doVideo() {
+        currentPage = 2;
+        goToPage();
+    }
+    
+    function doExit(){
+
+        //note use of short-circuit AND. If the user reached the end, don't prompt.
+        //just exit normally and submit the results.
+        if (reachedEnd == false && confirm("Would you like to save your progress to resume later?")){
+            //set exit to suspend
+            ScormProcessSetValue("cmi.core.exit", "suspend");
+        }
+        else{
+            //set exit to normal
+            ScormProcessSetValue("cmi.core.exit", "");
+        }
+        
+        //process the unload handler to close out the session.
+        //the presense of an adl.nav.request will cause the LMS to 
+        //take the content away from the user.
+        doUnload(true);
+        
+    }
+    
+    //called from the assessmenttemplate.html page to record the results of a test
+    //passes in score as a percentage
+    function RecordTest(score){
+        console.log(score);
+        ScormProcessSetValue("cmi.core.score.raw", score);
+        ScormProcessSetValue("cmi.core.score.min", "0");
+        ScormProcessSetValue("cmi.core.score.max", "100");
+        
+        //if we get a test result, set the lesson status to passed/failed instead of completed
+        //consider 50% to be passing
+        if (score >= 50){
+            ScormProcessSetValue("cmi.core.lesson_status", "passed");
+        }
+        else{
+            ScormProcessSetValue("cmi.core.lesson_status", "failed");
+        }
+    }
+    
+    //SCORM requires time to be formatted in a specific way
+    function ConvertMilliSecondsToSCORMTime(intTotalMilliseconds, blnIncludeFraction){
+    
+        var intHours;
+        var intintMinutes;
+        var intSeconds;
+        var intMilliseconds;
+        var intHundredths;
+        var strCMITimeSpan;
+        
+        if (blnIncludeFraction == null || blnIncludeFraction == undefined){
+            blnIncludeFraction = true;
+        }
+        
+        //extract time parts
+        intMilliseconds = intTotalMilliseconds % 1000;
+
+        intSeconds = ((intTotalMilliseconds - intMilliseconds) / 1000) % 60;
+
+        intMinutes = ((intTotalMilliseconds - intMilliseconds - (intSeconds * 1000)) / 60000) % 60;
+
+        intHours = (intTotalMilliseconds - intMilliseconds - (intSeconds * 1000) - (intMinutes * 60000)) / 3600000;
+
+        /*
+        deal with exceptional case when content used a huge amount of time and interpreted CMITimstamp 
+        to allow a number of intMinutes and seconds greater than 60 i.e. 9999:99:99.99 instead of 9999:60:60:99
+        note - this case is permissable under SCORM, but will be exceptionally rare
+        */
+
+        if (intHours == 10000) 
+        {	
+            intHours = 9999;
+
+            intMinutes = (intTotalMilliseconds - (intHours * 3600000)) / 60000;
+            if (intMinutes == 100) 
+            {
+                intMinutes = 99;
+            }
+            intMinutes = Math.floor(intMinutes);
+            
+            intSeconds = (intTotalMilliseconds - (intHours * 3600000) - (intMinutes * 60000)) / 1000;
+            if (intSeconds == 100) 
+            {
+                intSeconds = 99;
+            }
+            intSeconds = Math.floor(intSeconds);
+            
+            intMilliseconds = (intTotalMilliseconds - (intHours * 3600000) - (intMinutes * 60000) - (intSeconds * 1000));
+        }
+
+        //drop the extra precision from the milliseconds
+        intHundredths = Math.floor(intMilliseconds / 10);
+
+        //put in padding 0's and concatinate to get the proper format
+        strCMITimeSpan = ZeroPad(intHours, 4) + ":" + ZeroPad(intMinutes, 2) + ":" + ZeroPad(intSeconds, 2);
+        
+        if (blnIncludeFraction){
+            strCMITimeSpan += "." + intHundredths;
+        }
+
+        //check for case where total milliseconds is greater than max supported by strCMITimeSpan
+        if (intHours > 9999) 
+        {
+            strCMITimeSpan = "9999:99:99";
+            
+            if (blnIncludeFraction){
+                strCMITimeSpan += ".99";
+            }
+        }
+
+        return strCMITimeSpan;
+        
+    }
+
+    function ZeroPad(intNum, intNumDigits){
+    
+        var strTemp;
+        var intLen;
+        var i;
+        
+        strTemp = new String(intNum);
+        intLen = strTemp.length;
+        
+        if (intLen > intNumDigits){
+            strTemp = strTemp.substr(0,intNumDigits);
+        }
+        else{
+            for (i=intLen; i<intNumDigits; i++){
+                strTemp = "0" + strTemp;
+            }
+        }
+        
+        return strTemp;
+    }
+    </script>
+    <script>
+        function fullScreen(){
+            document.documentElement.requestFullscreen();
+        }
+        function exitFullScreen(){
+            document.exitFullscreen();
+        }
+    </script>
+
+</body>
+</html>

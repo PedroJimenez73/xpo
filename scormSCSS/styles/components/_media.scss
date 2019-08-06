@@ -1,0 +1,20 @@
+.imagen {
+    margin-bottom: -2em;
+    background-color: $gris-claro;
+    width: 80%;
+
+    img {
+        width: 80%;
+    }
+}
+
+video {
+    margin: 0 auto;
+    width: 70%;
+}
+
+@media (max-width: 540px) {
+    video {
+       width: 90%;
+    }
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>XPO Logistics Test</title>
+	<link rel="stylesheet" href="../shared/style.css">
+	<script src="../shared/js/jquery.min.js"></script>
+	<script src="../shared/scormfunctions.js" type="text/javascript"></script>
+</head>
+<body>
+	<div class="contenedor lesson condicional">
+		<div class="fila space">
+			<h1>Actividades</h1>
+			<button class="outline" onclick="parent.exitFullScreen();">
+				Salir
+			</button>
+		</div>
+		<div class="fila">
+			<div class="actividades mostrada" id="actividad-2">
+				<h2>2. Si necesitamos consumibles o alguna cosa no funciona de la forma esperada avisaremos a:</h2>
+				<hr>
+				<div class="respuesta">
+				  <input type="radio" class="pregunta-2" id="dos-1" name="pregunta-2" value="si">
+				  <label for="dos-1">a.	El personal de apoyo
+					  <img src="../shared/img/check-circle.svg" alt="">
+				  </label>
+				</div>
+				<div class="respuesta">
+				  <input type="radio" class="pregunta-2" id="dos-2" name="pregunta-2" value="no">
+				  <label for="dos-2">b.	El personal de soporte
+					<img src="../shared/img/x-circle.svg" alt="">
+				  </label>
+				</div>
+				<div class="respuesta">
+				  <input type="radio" class="pregunta-2" id="dos-3" name="pregunta-2" value="no">
+				  <label for="dos-3">c.	Al supervisor
+					<img src="../shared/img/x-circle.svg" alt="">
+				  </label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<nav>
+		<img src="../shared/img/xpo-logo-dark.svg" alt="">
+		<div>
+			<span class="mensaje verdadero condicional" id="msg-correcta">
+				¡La respuesta es correcta, continua a la siguiente!
+			</span>
+			<span class="mensaje falso condicional" id="msg-incorrecta">
+				Lo sentimos, la respuesta no es correcta, continua a la siguiente.
+			</span>
+			<button id="btn-2" class="outline condicional" onclick="checkAct2()">Comprobar respuesta</button>
+		</div>
+		<div>
+			<button onclick="parent.doPrevious()">
+				Ant
+			</button>
+			<span id="counter"></span>
+			<button id="btn-sig" onclick="parent.doNext()">
+				Sig
+			</button>
+		</div>
+	</nav>
+	<script>
+		document.getElementById('counter');
+		counter.innerHTML = (parent.currentPage + 1) + " / " + parent.pageArray.length;
+	</script>
+	<script>
+		var actividad2 = document.getElementById('actividad-2');
+	    var inputs2 = document.querySelectorAll(".pregunta-2");
+		var resAct2;
+		var btn2 = document.getElementById('btn-2');
+		var btnSig = document.getElementById('btn-sig');
+		btn2.style.display = 'none';
+		btnSig.style.opacity = '0';
+		btnSig.style.pointerEvents = 'none';
+		msgCorrecta = document.getElementById('msg-correcta');
+		msgIncorrecta = document.getElementById('msg-incorrecta');
+		msgCorrecta.style.display = 'none';
+		msgIncorrecta.style.display = 'none';
+
+		if (localStorage.getItem('resAct2')){
+			btnSig.style.opacity = '1';
+			btnSig.style.pointerEvents = 'auto';
+			actividad2.style.pointerEvents = 'none';
+			resAct2 = JSON.parse(localStorage.getItem('resAct2'));
+			inputs2[resAct2.index].checked = 'true';
+			if (inputs2[resAct2.index].value === 'si') {
+				inputs2[resAct2.index].classList.add('verdadero');
+				msgCorrecta.style.display = 'block';
+				btn2.style.display = 'none';
+			} else {
+				inputs2[resAct2.index].classList.add('falso'); 
+				msgIncorrecta.style.display = 'block';
+				btn2.style.display = 'none';
+			}
+		}
+
+		for (i = 0; i < inputs2.length; i++) {
+			inputs2[i].addEventListener('click', function(){
+				btn2.style.display = 'inline';
+			});
+		}
+
+		function checkAct2() {
+			btnSig.style.opacity = '1';
+			btnSig.style.pointerEvents = 'auto';
+			msgCorrecta.style.display = 'none';
+			msgIncorrecta.style.display = 'none';
+			for (i = 0; i < inputs2.length; i++) {
+				inputs2[i].classList.remove('verdadero');
+				inputs2[i].classList.remove('falso');
+				if (inputs2[i].checked) {
+					if (inputs2[i].value === 'si') {
+						resAct2 = { index: i, passed2: true}
+						localStorage.setItem('resAct2', JSON.stringify(resAct2));
+						inputs2[i].classList.add('verdadero');
+						msgCorrecta.style.display = 'block';
+						btn2.style.display = 'none';
+						actividad2.style.pointerEvents = 'none';
+						
+					} else {
+						resAct2 = { index: i, passed2: false }  
+						localStorage.setItem('resAct2', JSON.stringify(resAct2));
+						inputs2[i].classList.add('falso'); 
+						msgIncorrecta.style.display = 'block';
+						btn2.style.display = 'none';
+						actividad2.style.pointerEvents = 'none';
+					}
+				}
+			}
+		}
+
+	</script>
+</body>
+</html>

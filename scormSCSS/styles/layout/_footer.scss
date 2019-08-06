@@ -1,0 +1,78 @@
+nav {
+    @include flex(row, space-between, center);
+    width: 100%;
+    padding: 0.5em 1em;
+    background-color: $gris-claro;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+
+    #counter {
+        background-color: white;
+        border: 1px solid $rojo;
+        color: $rojo;
+        font-size: 1em;
+        font-family: $fuente;
+        box-shadow: 0 4px 16px 0 rgba(88,103,221,.15);
+        height: 40px;
+        padding: 0.5em 1em;
+        border-radius: 4px;
+        margin: 0 0.5em;
+    }
+
+    .mensaje {
+        text-align: center;
+        border-radius: 4px;
+        font-size: 1em;
+        background-color: #ffffff;
+        padding: 0.5em 1em;
+    }
+
+    .mensaje.condicional {
+        opacity: 0;
+        animation: fadein 0.7s ease-in-out forwards;
+    }
+
+    .mensaje.verdadero {
+        color: #168888;
+        border: 1px solid #168888;
+    }
+
+    .mensaje.falso {
+        color: #dc143c;
+        border: 1px solid #dc143c;
+    }
+
+}
+
+.fondo-portada nav {
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+@media (max-width: 840px) {
+    nav {
+        @include flex(column, center, center);
+
+        img {
+            display: none;
+        }
+    }
+
+    .fondo-portada nav {
+        @include flex(row, space-between, center);
+
+        img {
+            display: block;
+            width: 100px;
+        }
+    }
+}
+
+
+
+
+
