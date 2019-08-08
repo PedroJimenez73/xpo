@@ -11,10 +11,16 @@
 </head>
 <body onload="doStart(false);" onbeforeunload="doUnload(false);" onunload="doUnload();">
 
-
-
     <iframe style="width: 100%; height: 100vh" id="contentFrame" src="" frameBorder="0" allowfullscreen></iframe>
 
+    <div id="modal-resume">
+        <span>&times;</span>
+        <p>¿Deseas volver a la última pantalla que visitaste?</p>
+        <div>
+            <button class="outline m-r-1em" onclick="startCourse(); fullScreen();">No</button>
+            <button onclick="resumeCourse(); fullScreen();">Si</button>
+        </div>
+    </div>
 
     <script type="text/javascript">
     
@@ -54,6 +60,13 @@
         window.setTimeout('window.onresize = function() { setIframeHeight("contentFrame", ' + navWidth + '); }', 1000);
     }
     
+    var objetoDatos = {
+        intent1: 0,
+        intent2: 0
+    };
+    var intent1;
+    var intent2;
+
     /*************************************/
     //content definition
     /*************************************/
@@ -86,6 +99,7 @@
     var btnAnt // = document.getElementById('btn-ant');
     var counter // = document.getElementById('counter');
     var btnSig // = document.getElementById('btn-sig');
+    var bookmark;
     
     function doStart(){
         
@@ -107,23 +121,44 @@
         
         //see if the user stored a bookmark previously (don't check for errors
         //because cmi.core.lesson_location may not be initialized
-        var bookmark = ScormProcessGetValue("cmi.core.lesson_location");
+        bookmark = ScormProcessGetValue("cmi.core.lesson_location");
         
         //if there isn't a stored bookmark, start the user at the first page
         if (!bookmark){
             currentPage = 0;
+            goToPage();
         }
-        else{
-            //if there is a stored bookmark, prompt the user to resume from the previous location
-            if (confirm("¿Desea continuar donde lo dejó en la anterior sesión?")){
-                currentPage = parseInt(bookmark, 10);
-            }
-            else{
-                currentPage = 0;
-            }
+        else {
+            toggleResumeModal()
+        }
+
+        // Recuperar datos de localStorage
+
+        if (ScormProcessGetValue("cmi.suspend_data")){
+            var objetoDatos = ScormProcessGetValue("cmi.suspend_data");
+            console.log(String(objetoDatos));
         }
         
+        
+    }
+
+    function toggleResumeModal() {
+        $("#modal-resume").toggleClass("show");
+        setTimeout(function(){
+            $("#modal-resume").toggleClass("visible");
+        }, 20);
+    }
+
+    function resumeCourse() {
+        currentPage = parseInt(bookmark, 10);
         goToPage();
+        toggleResumeModal();
+    }
+
+    function startCourse() {
+        currentPage = 0;
+        goToPage();
+        toggleResumeModal();
     }
 
     function goFromMenu(e) {
@@ -166,6 +201,22 @@
             reachedEnd = true;
             ScormProcessSetValue("cmi.core.lesson_status", "completed");
         }
+
+        //Guardar datos de localStorage
+
+        if (localStorage.getItem('intent1')){
+            intent1 = JSON.parse(localStorage.getItem('intent1'));
+            objetoDatos.intent1 = intent1;
+        }
+        if (localStorage.getItem('intent2')){
+            intent2 = JSON.parse(localStorage.getItem('intent2'));
+            objetoDatos.intent2 = intent2;
+        }
+        console.log(String(objetoDatos));
+        ScormProcessSetValue("cmi.suspend_data", objetoDatos);
+
+
+        //document.documentElement.requestFullscreen();
     }
     
     function doUnload(pressedExit){
@@ -210,12 +261,20 @@
         currentPage = 2;
         goToPage();
     }
+
+    function fullScreen(){
+            document.documentElement.requestFullscreen();
+        }
+
+    function exitFullScreen(){
+        document.exitFullscreen();
+    }
     
     function doExit(){
 
         //note use of short-circuit AND. If the user reached the end, don't prompt.
         //just exit normally and submit the results.
-        if (reachedEnd == false && confirm("Would you like to save your progress to resume later?")){
+        if (reachedEnd == false && confirm("¿Desea guardar su progreso para continuar más tarde?")){
             //set exit to suspend
             ScormProcessSetValue("cmi.core.exit", "suspend");
         }
@@ -343,14 +402,8 @@
         
         return strTemp;
     }
-    </script>
-    <script>
-        function fullScreen(){
-            document.documentElement.requestFullscreen();
-        }
-        function exitFullScreen(){
-            document.exitFullscreen();
-        }
+
+
     </script>
 
 </body>

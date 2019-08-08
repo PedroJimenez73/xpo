@@ -54,11 +54,11 @@
 			<button id="btn-2" class="outline condicional" onclick="checkAct2()">Comprobar respuesta</button>
 		</div>
 		<div>
-			<button onclick="parent.doPrevious()">
+			<button onclick="parent.fullScreen(); parent.doPrevious()">
 				Ant
 			</button>
 			<span id="counter"></span>
-			<button id="btn-sig" onclick="parent.doNext()">
+			<button id="btn-sig" onclick="parent.fullScreen(); parent.doNext()">
 				Sig
 			</button>
 		</div>
@@ -80,6 +80,7 @@
 		msgIncorrecta = document.getElementById('msg-incorrecta');
 		msgCorrecta.style.display = 'none';
 		msgIncorrecta.style.display = 'none';
+		var intent2 = 0;
 
 		if (localStorage.getItem('resAct2')){
 			btnSig.style.opacity = '1';
@@ -109,6 +110,12 @@
 			btnSig.style.pointerEvents = 'auto';
 			msgCorrecta.style.display = 'none';
 			msgIncorrecta.style.display = 'none';
+			if (localStorage.getItem('intent2')){
+				intent2 = JSON.parse(localStorage.getItem('intent2'));
+				localStorage.setItem('intent2', JSON.stringify(intent2 + 1));
+			} else {
+				localStorage.setItem('intent2', JSON.stringify(1));
+			}
 			for (i = 0; i < inputs2.length; i++) {
 				inputs2[i].classList.remove('verdadero');
 				inputs2[i].classList.remove('falso');

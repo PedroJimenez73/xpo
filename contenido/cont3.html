@@ -84,11 +84,11 @@
 			<button id="btn-1" class="outline condicional" onclick="checkAct1()">Comprobar respuesta</button>
 		</div>
 		<div>
-			<button onclick="parent.doPrevious()">
+			<button onclick="parent.fullScreen(); parent.doPrevious()">
 				Ant
 			</button>
 			<span id="counter"></span>
-			<button id="btn-sig" onclick="parent.doNext()">
+			<button id="btn-sig" onclick="parent.fullScreen(); parent.doNext()">
 				Sig
 			</button>
 		</div>
@@ -121,6 +121,7 @@
 		contFallos = 0;
 		msgCorrecta.style.display = 'none';
 		msgIncorrecta.style.display = 'none';
+		var intent1 = 0;
 
 		if(localStorage.getItem('act1')){
 			mesa.style.pointerEvents = 'none';
@@ -212,6 +213,12 @@
 			msgCorrecta.style.display = 'none';
 			msgIncorrecta.style.display = 'none';
 			contFallos = 0;
+			if (localStorage.getItem('intent1')){
+				intent1 = JSON.parse(localStorage.getItem('intent1'));
+				localStorage.setItem('intent1', JSON.stringify(intent1 + 1));
+			} else {
+				localStorage.setItem('intent1', JSON.stringify(1));
+			}
 			for(i=0; i < act1.length; i++) {
 				if(act1[i].drop === act1[i].drag) {
 					resAct1.push(true);

@@ -60,14 +60,14 @@ function getAPI()
         (window.opener != null) &&
         (typeof(window.opener) != "undefined") )
    {
-      // try to find the API in the current window�s opener
+      // try to find the API in the current window�s opener
       theAPI = findAPI(window.opener);
    }
    // if the API has not been found
    if (theAPI == null)
    {
       // Alert the user that the API Adapter could not be found
-      alert("Unable to find an API adapter");
+      alert("No se encontró la comunicación con la API de la plataforma.");
    }
    return theAPI;
 }
@@ -101,7 +101,7 @@ function ScormProcessInitialize(){
     API = getAPI();
     
     if (API == null){
-        alert("ERROR - Could not establish a connection with the LMS.\n\nYour results may not be recorded.");
+        alert("ERROR - No fue posible conectar con la plataforma LMS.\n\n Sus resultados podrían no haber sido grabados.");
         return;
     }
     
@@ -112,9 +112,9 @@ function ScormProcessInitialize(){
         var errorString = API.LMSGetErrorString(errorNumber);
         var diagnostic = API.LMSGetDiagnostic(errorNumber);
         
-        var errorDescription = "Number: " + errorNumber + "\nDescription: " + errorString + "\nDiagnostic: " + diagnostic;
+        var errorDescription = "Número: " + errorNumber + "\nDescripción: " + errorString + "\nDiagnóstico: " + diagnostic;
         
-        alert("Error - Could not initialize communication with the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
+        alert("Error - No se pudo establecer la comunicación con la plataforma LMS.\n\nSus resultados podrían no haber sido grabados.\n\n" + errorDescription);
         return;
     }
     
@@ -137,9 +137,9 @@ function ScormProcessFinish(){
         var errorString = API.LMSGetErrorString(errorNumber);
         var diagnostic = API.LMSGetDiagnostic(errorNumber);
         
-        var errorDescription = "Number: " + errorNumber + "\nDescription: " + errorString + "\nDiagnostic: " + diagnostic;
+        var errorDescription = "Número: " + errorNumber + "\nDescripción: " + errorString + "\nDiagnóstico: " + diagnostic;
         
-        alert("Error - Could not terminate communication with the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
+        alert("Error - No se pudo establecer la comunicación con la plataforma LMS.\n\nSus resultados podrían no haber sido grabados.\n\n" + errorDescription);
         return;
     }
 }
@@ -170,9 +170,9 @@ function ScormProcessGetValue(element){
             var errorString = API.LMSGetErrorString(errorNumber);
             var diagnostic = API.LMSGetDiagnostic(errorNumber);
             
-            var errorDescription = "Number: " + errorNumber + "\nDescription: " + errorString + "\nDiagnostic: " + diagnostic;
+            var errorDescription = "Número: " + errorNumber + "\nDescripción: " + errorString + "\nDiagnóstico: " + diagnostic;
             
-            alert("Error - Could not retrieve a value from the LMS.\n\n" + errorDescription);
+            alert("Error - No se pudo establecer la comunicación con la plataforma LMS.\n\n" + errorDescription);
             return "";
         }
     }
@@ -193,9 +193,9 @@ function ScormProcessSetValue(element, value){
         var errorString = API.LMSGetErrorString(errorNumber);
         var diagnostic = API.LMSGetDiagnostic(errorNumber);
         
-        var errorDescription = "Number: " + errorNumber + "\nDescription: " + errorString + "\nDiagnostic: " + diagnostic;
+        var errorDescription = "Número: " + errorNumber + "\nDescripción: " + errorString + "\nDiagnóstico: " + diagnostic;
         
-        alert("Error - Could not store a value in the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
+        alert("Error - No se pudo establecer la comunicación con la plataforma  LMS.\n\nSus resultados podrían no haber sido grabados.\n\n" + errorDescription);
         return;
     }
     

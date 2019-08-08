@@ -68,7 +68,7 @@
 		<img src="../shared/img/xpo-logo-dark.svg" alt="">
 		<button id="repasar" class="outline condicional" onclick="resetAct();parent.doVideo();">Repasar</button>
 		<div>
-			<button onclick="parent.doPrevious()">
+			<button onclick="parent.fullScreen(); parent.doPrevious()">
 				Ant
 			</button>
 			<span id="counter"></span>
@@ -157,17 +157,24 @@
 			}
 		}
 
-		if(localStorage.getItem('intentos')){
-			intentos = JSON.parse(localStorage.getItem('intentos'));
-			intentos++;
-			localStorage.setItem('intentos', JSON.stringify(intentos));
-		} else {
-			intentos = 1;
-			localStorage.setItem('intentos', JSON.stringify(intentos));
+		if(localStorage.getItem('intent3')) {
+			var intent1 = JSON.parse(localStorage.getItem('intent1'));
+			var intent2 = JSON.parse(localStorage.getItem('intent2'));
+			var intent3 = JSON.parse(localStorage.getItem('intent3'));
+			if (intent1 === 1 || intent2 === 1 || intent3 === 1 ) {
+				intentos = 1;
+			} 
+			
+			if (intent1 === 2 || intent2 === 2 || intent3 === 2) {
+				intentos = 2;
+			} 
+			
+			if (intent1 === 3 || intent2 === 3 || intent3 === 3) {
+				intentos = 3;
+			}
 		}
 
-		if (intentos >= 3) {
-		} else {
+		if (intentos < 3) {
 			contIntentos.innerHTML = 'Te quedan ' + (3 - intentos) + ' de 3 intentos';
 		}
 
@@ -273,7 +280,27 @@
 			}
 		}
 
+		if (parent.RecordTest){
+			var score = (correct / results.length) * 100;
+            parent.RecordTest(parseInt(score));
+        }
+
+		// function RecordTest(score){
+		// 	ScormProcessSetValue("cmi.core.score.raw", score);
+		// 	ScormProcessSetValue("cmi.core.score.min", "0");
+		// 	ScormProcessSetValue("cmi.core.score.max", "100");
+			
+		// 	//if we get a test result, set the lesson status to passed/failed instead of completed
+		// 	//consider 50% to be passing
+		// 	if (score >= 50){
+		// 		ScormProcessSetValue("cmi.core.lesson_status", "passed");
+		// 	}
+		// 	else{
+		// 		ScormProcessSetValue("cmi.core.lesson_status", "failed");
+		// 	}
+		// }
 
 	</script>
 </body>
 </html>
+
