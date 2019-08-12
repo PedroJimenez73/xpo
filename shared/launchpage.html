@@ -61,11 +61,17 @@
     }
     
     var objetoDatos = {
-        intent1: 0,
-        intent2: 0
-    };
-    var intent1;
-    var intent2;
+    //    intent1 : 0,
+    //    intent2 : 0,
+    //    intent3 : 0,
+    //    act1 : [],
+    //    resAct1 : [],
+    //    contFallos : 0,
+    //    passed1 : false,
+    //    resAct2 : {},
+    //    resAct3 : {},
+    }
+
 
     /*************************************/
     //content definition
@@ -135,10 +141,47 @@
         // Recuperar datos de localStorage
 
         if (ScormProcessGetValue("cmi.suspend_data")){
-            var objetoDatos = ScormProcessGetValue("cmi.suspend_data");
-            console.log(String(objetoDatos));
+            var datosLMS = JSON.parse(ScormProcessGetValue("cmi.suspend_data"));
+            console.log(datosLMS);
+
+            localStorage.removeItem('intent1');
+            localStorage.removeItem('intent2');
+            localStorage.removeItem('intent3');
+            localStorage.removeItem('act1');
+            localStorage.removeItem('resAct1');
+            localStorage.removeItem('contFallos');
+            localStorage.removeItem('passed1');
+            localStorage.removeItem('resAct2');
+            localStorage.removeItem('resAct3');
+            
+            if(datosLMS.intent1){
+                localStorage.setItem('intent1', JSON.stringify(datosLMS.intent1));
+            }
+            if(datosLMS.intent2){
+                localStorage.setItem('intent2', JSON.stringify(datosLMS.intent2));
+            }
+            if(datosLMS.intent3){
+                localStorage.setItem('intent3', JSON.stringify(datosLMS.intent3));
+            }
+            if(datosLMS.act1){
+                localStorage.setItem('act1', JSON.stringify(datosLMS.act1));
+            }
+            if(datosLMS.resAct1){
+                localStorage.setItem('resAct1', JSON.stringify(datosLMS.resAct1));
+            }
+            if(datosLMS.contFallos){
+                localStorage.setItem('contFallos', JSON.stringify(datosLMS.contFallos));
+            }
+            if(datosLMS.passed1){
+                localStorage.setItem('passed1', JSON.stringify(datosLMS.passed1));
+            }
+            if(datosLMS.resAct2){
+                localStorage.setItem('resAct2', JSON.stringify(datosLMS.resAct2));
+            }
+            if(datosLMS.resAct3){
+                localStorage.setItem('resAct3', JSON.stringify(datosLMS.resAct3));
+            }
         }
-        
         
     }
 
@@ -169,25 +212,6 @@
     function goToPage(){
     
         var theIframe = document.getElementById("contentFrame");
-
-        // 
-
-        // if (currentPage === 0){
-        //     btnAnt.style.opacity = 0;
-        //     btnAnt.style.pointerEvents = 'none';
-        //     btnSig.style.opacity = 1;
-        //     btnSig.style.pointerEvents = 'auto';
-        // } else if (currentPage === (pageArray.length - 1)){
-        //     btnAnt.style.opacity = 1;
-        //     btnAnt.style.pointerEvents = 'auto';
-        //     btnSig.style.opacity = 0;
-        //     btnSig.style.pointerEvents = 'none';
-        // } else {
-        //     btnAnt.style.opacity = 1;
-        //     btnAnt.style.pointerEvents = 'auto';
-        //     btnSig.style.opacity = 1;
-        //     btnSig.style.pointerEvents = 'auto';
-        // }
         
         //navigate the iFrame to the content
         theIframe.src = "../" + pageArray[currentPage];
@@ -202,21 +226,43 @@
             ScormProcessSetValue("cmi.core.lesson_status", "completed");
         }
 
+        
+    }
+
+    function saveResults() {
         //Guardar datos de localStorage
 
         if (localStorage.getItem('intent1')){
-            intent1 = JSON.parse(localStorage.getItem('intent1'));
-            objetoDatos.intent1 = intent1;
+            objetoDatos.intent1 = JSON.parse(localStorage.getItem('intent1'));
         }
         if (localStorage.getItem('intent2')){
-            intent2 = JSON.parse(localStorage.getItem('intent2'));
-            objetoDatos.intent2 = intent2;
+            objetoDatos.intent2 = JSON.parse(localStorage.getItem('intent2'));
         }
-        console.log(String(objetoDatos));
-        ScormProcessSetValue("cmi.suspend_data", objetoDatos);
+        if (localStorage.getItem('intent3')){
+            objetoDatos.intent3 = JSON.parse(localStorage.getItem('intent3'));
+        }
+        if (localStorage.getItem('act1')){
+            objetoDatos.act1 = JSON.parse(localStorage.getItem('act1'));
+        }
+        if (localStorage.getItem('resAct1')){
+            objetoDatos.resAct1 = JSON.parse(localStorage.getItem('resAct1'));
+        }
+        if (localStorage.getItem('contFallos')){
+            objetoDatos.contFallos = JSON.parse(localStorage.getItem('contFallos'));
+        }
+        if (localStorage.getItem('passed1')){
+            objetoDatos.passed1 = JSON.parse(localStorage.getItem('passed1'));
+        }
+        if (localStorage.getItem('resAct2')){
+            objetoDatos.resAct2 = JSON.parse(localStorage.getItem('resAct2'));
+        }
+        if (localStorage.getItem('resAct3')){
+            objetoDatos.resAct3 = JSON.parse(localStorage.getItem('resAct3'));
+        }
+        console.log(objetoDatos);
+        objetoJSON = JSON.stringify(objetoDatos);
 
-
-        //document.documentElement.requestFullscreen();
+        ScormProcessSetValue("cmi.suspend_data", objetoJSON);
     }
     
     function doUnload(pressedExit){
