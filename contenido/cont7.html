@@ -10,90 +10,314 @@
 	<script src="../shared/scormfunctions.js" type="text/javascript"></script>
 </head>
 <body>
-	<div class="contenedor lesson">
-		<div class="fila">
-			<h1>Resumen</h1>
+	<div class="contenedor lesson condicional">
+		<div class="fila space">
+			<h1>Actividades</h1>
+			<button class="outline" onclick="parent.exitFullScreen(); parent.goProgress();">
+				Salir
+			</button>
 		</div>
 		<div class="fila">
-			<div class="tabs">
-				<ul id="tab-links" class="ul-tabs">
-					<li class="li-tabs"><a href="#tab-1" class="a-tabs active" title="Code">1</a></li>
-					<li class="li-tabs"><a href="#tab-2" class="a-tabs" title="Graphic Design &amp; Illustration">2</a></li>
-					<li class="li-tabs"><a href="#tab-3" class="a-tabs" title="Web Design">3</a></li>
-					<li class="li-tabs"><a href="#tab-4" class="a-tabs" title="Business">4</a></li>
-					<li class="li-tabs"><a href="#tab-5" class="a-tabs" title="Photography &amp; Video">5</a></li>
-				</ul>
-				
-				<section id="tab-1" class="active section-tabs">
-					<h3>Lorem 1</h3>
-					<hr>
-					<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis totam sapiente dolorum quia? Harum, animi!</p>
-					<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi, molestias.</p>
-					
-				</section>
-				
-				<section id="tab-2" class="section-tabs">
-					<h3>Lorem 2</h3>
-					<hr>
-					<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi, molestias.</p>
-					<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis totam sapiente dolorum quia? Harum, animi!</p>
-				</section>
-				
-				<section id="tab-3" class="section-tabs">
-					<h3>Lorem 3</h3>
-					<hr>
-					<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis totam sapiente dolorum quia? Harum, animi!</p>
-					<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi, molestias.</p>
-				</section>
-				
-				<section id="tab-4" class="section-tabs">
-					<h3>Lorem 4</h3>
-					<hr>
-					<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis totam sapiente dolorum quia? Harum, animi!</p>
-				</section>
-				
-				<section id="tab-5" class="section-tabs">
-					<h3>Lorem 5</h3>
-					<hr>
-					<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi, molestias.</p>
-					<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis totam sapiente dolorum quia? Harum, animi!</p>
-				</section>
+			<div class="actividades mostrada">
+				<h2>Resultados</h2>
+				<hr>
+				<div style="display: flex; margin: 0; padding: 0;">
+					<div class="col-50 columna">
+						<div class="resultado" id="res-1">
+							<span id="icon-1"></span>
+							<div>
+								<p>ACTIVIDAD 1</p>
+								<p id="act-1"></p>
+							</div>
+						</div>
+						<div class="resultado" id="res-2">
+							<span id="icon-2"></span>
+							<div>
+								<p>ACTIVIDAD 2</p>
+								<p id="act-2"></p>
+							</div>
+						</div>
+						<div class="resultado" id="res-3">
+							<span id="icon-3"></span>
+							<div>
+								<p>ACTIVIDAD 3</p>
+								<p id="act-3"></p>
+							</div>
+						</div>
+						<div class="resultado" id="res-4">
+							<span id="icon-4"></span>
+							<div>
+								<p>ACTIVIDAD 4</p>
+								<p id="act-4"></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-50 doble-centrada">
+						<div class="cont-chart">
+							<div class="pieID--micro-skills">
+								<div class="pie-chart">
+									<div class="pie-chart__pie">
+									</div>
+								</div>
+							</div>
+							<span class="step"></span>
+						</div>
+					</div>
+				</div>
+				<div style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
+					<p style="font-size: 18px; padding: 10px 0;" id="feedback"></p>
+					<p style="font-size: 18px; padding: 10px 0;" id="cont-intentos"></p>
+				</div>
 			</div>
 		</div>
 	</div>
 	<nav>
 		<img src="../shared/img/xpo-logo-dark.svg" alt="">
+		<button id="repasar" class="outline condicional" onclick="resetAct();parent.doVideo();">Repasar</button>
 		<div>
-			<button onclick="parent.doPrevious()">
+			<button onclick="parent.fullScreen(); parent.doPrevious()">
 				Ant
 			</button>
 			<span id="counter"></span>
 		</div>
-		<button class="outline" onclick="parent.exitFullScreen();">
-			Salir
-		</button>
 	</nav>
-
 	<script>
-		$(function() {
-			// Reference the tab links.
-			const tabLinks = $('#tab-links li a');
-			// Handle link clicks.
-			tabLinks.click(function(event) {
-				var $this = $(this);
-				
-				// Prevent default click behaviour.
-				event.preventDefault();
-				console.log('pica?')
-				
-				// Remove the active class from the active link and section.
-				$('#tab-links a.active, section.active').removeClass('active');
-				
-				// Add the active class to the current link and corresponding section.
-				$this.addClass('active');
-				$($this.attr('href')).addClass('active');
+		document.getElementById('counter');
+		counter.innerHTML = (parent.currentPage + 1) + " / " + (parent.pageArray.length - 2);
+	</script>
+	<script>
+		var intentos;
+		var act1 = document.getElementById('act-1');
+		var act2 = document.getElementById('act-2');
+		var act3 = document.getElementById('act-3');
+		var act4 = document.getElementById('act-4');
+		var icon1 = document.getElementById('icon-1');
+		var icon2 = document.getElementById('icon-2');
+		var icon3 = document.getElementById('icon-3');
+		var icon4 = document.getElementById('icon-4');
+		var res1 = document.getElementById('res-1');
+		var res2 = document.getElementById('res-2');
+		var res3 = document.getElementById('res-3');
+		var res4 = document.getElementById('res-4');
+		var passed1;
+		var passed2;
+		var passed3;
+		var passed4;
+		var feedback = document.getElementById('feedback');
+		var contIntentos = document.getElementById('cont-intentos');
+		var repasar = document.getElementById('repasar');
+		repasar.style.display = 'none';
+		var results = [];
+		var correct = 0;
+		var incorrect = 0;
+
+		if(localStorage.getItem('passed1')){
+			passed1 = JSON.parse(localStorage.getItem('passed1'));
+			if (passed1) {
+				res1.classList.add('correcto');
+				act1.innerHTML = 'Correcta';
+				icon1.innerHTML = '<img src="../shared/img/check-circle.svg" alt="">'
+			} else {
+				res1.classList.add('incorrecto');
+				act1.innerHTML = 'Incorrecta';
+				icon1.innerHTML = '<img src="../shared/img/x-circle.svg" alt="">'
+			}
+		} else {
+			act1.innerHTML = 'No realizada';
+		}
+
+		if(localStorage.getItem('resAct2')){
+			passed2 = JSON.parse(localStorage.getItem('resAct2')).passed2;
+			if (passed2) {
+				res2.classList.add('correcto');
+				act2.innerHTML = 'Correcta';
+				icon2.innerHTML = '<img src="../shared/img/check-circle.svg" alt="">'
+			} else {
+				res2.classList.add('incorrecto');
+				act2.innerHTML = 'Incorrecta';
+				icon2.innerHTML = '<img src="../shared/img/x-circle.svg" alt="">'
+			}
+		} else {
+			act2.innerHTML = 'No realizada';
+		}
+
+		if(localStorage.getItem('resAct3')){
+			passed3 = JSON.parse(localStorage.getItem('resAct3')).passed3;
+			if (passed3) {
+				res3.classList.add('correcto');
+				act3.innerHTML = 'Correcta';
+				icon3.innerHTML = '<img src="../shared/img/check-circle.svg" alt="">'
+			} else {
+				res3.classList.add('incorrecto');
+				act3.innerHTML = 'Incorrecta';
+				icon3.innerHTML = '<img src="../shared/img/x-circle.svg" alt="">'
+			}
+		} else {
+			act3.innerHTML = 'No realizada';
+		}
+
+		if(localStorage.getItem('resAct4')){
+			passed4 = JSON.parse(localStorage.getItem('resAct4')).passed4;
+			if (passed4) {
+				res4.classList.add('correcto');
+				act4.innerHTML = 'Correcta';
+				icon4.innerHTML = '<img src="../shared/img/check-circle.svg" alt="">'
+			} else {
+				res4.classList.add('incorrecto');
+				act4.innerHTML = 'Incorrecta';
+				icon4.innerHTML = '<img src="../shared/img/x-circle.svg" alt="">'
+			}
+		} else {
+			act4.innerHTML = 'No realizada';
+		}
+    
+		results.push(passed1);
+		results.push(passed2);
+		results.push(passed3);
+		results.push(passed4);
+
+		for(i=0; i < results.length; i++){
+			if(results[i]) {
+				correct++;
+			} else {
+				incorrect++;
+			}
+		}
+
+		if(localStorage.getItem('intent4')) {
+			var intent1 = JSON.parse(localStorage.getItem('intent1'));
+			var intent2 = JSON.parse(localStorage.getItem('intent2'));
+			var intent3 = JSON.parse(localStorage.getItem('intent3'));
+			var intent4 = JSON.parse(localStorage.getItem('intent4'));
+			if (intent1 === 1 || intent2 === 1 || intent3 === 1 || intent4 === 1 ) {
+				intentos = 1;
+			} 
+			
+			if (intent1 === 2 || intent2 === 2 || intent3 === 2 || intent4 === 2) {
+				intentos = 2;
+			} 
+			
+			if (intent1 === 3 || intent2 === 3 || intent3 === 3 || intent4 === 3) {
+				intentos = 3;
+			}
+		}
+
+		if (intentos < 3) {
+			contIntentos.innerHTML = 'Te quedan ' + (3 - intentos) + ' de 3 intentos';
+		}
+
+		if (intentos >= 3) { 
+			if (correct === 1 || correct === 0) {
+				feedback.innerHTML = 'Lo sentimos, no has superado las actividades.';
+				contIntentos.innerHTML = 'No te quedan intentos, pulsa salir para finalizar.';
+				repasar.style.display = 'none';
+			} else if (correct === 2 || correct === 3) {
+				feedback.innerHTML = 'Has superado las actividades necesarias de la unidad.';
+				contIntentos.innerHTML = 'No te quedan intentos, pulsa salir para finalizar.';
+				repasar.style.display = 'none';
+			} else if (correct === 4) {
+				feedback.innerHTML = '¡Enhorabuena, has superado todas las actividades!';
+				contIntentos.innerHTML = 'Pulsa salir para finalizar.';
+				repasar.style.display = 'none';
+			}
+		} else {
+			if (correct === 1 || correct === 0) {
+				feedback.innerHTML = 'Lo sentimos, no has superado las actividades. Pulsa en repasar para visualizar de nuevo el tutorial y realizar las actividades.';
+				contIntentos.innerHTML = 'Te quedan ' + (3 - intentos) + ' de 3 intentos';
+				repasar.style.display = 'inline';
+			} else if (correct === 2 || correct === 3) {
+				feedback.innerHTML = 'Has superado las actividades pero puedes mejorar el resultado. Pulsa en repasar para visualizar de nuevo el tutorial y realizar las actividades.';
+				contIntentos.innerHTML = 'Te quedan ' + (3 - intentos) + ' de 3 intentos';
+				repasar.style.display = 'inline';
+			} else if (correct === 4) {
+				feedback.innerHTML = '¡Enhorabuena, has superado todas las actividades!';
+				contIntentos.innerHTML = 'Pulsa salir para finalizar.';
+				repasar.style.display = 'none';
+			}
+		}
+
+
+		function sliceSize(dataNum, dataTotal) {
+			return (dataNum / dataTotal) * 360;
+		}
+	
+		function addSlice(id, sliceSize, pieElement, offset, sliceID, color) {
+			$(pieElement).append("<div class='slice "+ sliceID + "'><span></span></div>");
+			var offset = offset - 1;
+			var sizeRotation = -179 + sliceSize;
+	
+			$(id + " ." + sliceID).css({
+				"transform": "rotate(" + offset + "deg) translate3d(0,0,0)"
 			});
-		});
+	
+			$(id + " ." + sliceID + " span").css({
+				"transform"       : "rotate(" + sizeRotation + "deg) translate3d(0,0,0)",
+				"background-color": color
+			});
+		}
+	
+		function iterateSlices(id, sliceSize, pieElement, offset, dataCount, sliceCount, color) {
+			var maxSize = 179,
+			sliceID = "s" + dataCount + "-" + sliceCount;
+	
+			if( sliceSize <= maxSize ) {
+				addSlice(id, sliceSize, pieElement, offset, sliceID, color);
+			} else {
+				addSlice(id, maxSize, pieElement, offset, sliceID, color);
+				iterateSlices(id, sliceSize-maxSize, pieElement, offset+maxSize, dataCount, sliceCount+1, color);
+			}
+		}
+	
+		function createPie(id) {
+			var listData      = [correct,incorrect],
+				listTotal     = results.length,
+				offset        = 0,
+				i             = 0,
+				pieElement    = id + " .pie-chart__pie"
+				dataElement   = 0
+	
+				color         = [
+					"#008489",
+					"lightgrey",
+				];
+	
+			for(i=0; i < listData.length; i++) {
+				var size = sliceSize(listData[i], listTotal);
+				iterateSlices(id, size, pieElement, offset, i, 0, color[i]);
+				$(dataElement + " li:nth-child(" + (i + 1) + ")").css("border-color", color[i]);
+				offset += size;
+			}
+	
+			$('.step').append("<span>" + listData[0] + " de " + listTotal + "</span>" );
+		}
+	
+		createPie('.pieID--micro-skills' );
+	
+		function resetAct() {
+			if(!passed1) {
+				localStorage.removeItem('act1');
+				localStorage.removeItem('passed1');
+				localStorage.removeItem('contFallos');
+				localStorage.removeItem('resAct1');
+			}
+			if(!passed2){
+				localStorage.removeItem('resAct2');
+			}
+			if(!passed3){
+				localStorage.removeItem('resAct3');
+			}
+			if(!passed4){
+				localStorage.removeItem('resAct4');
+			}
+			parent.saveResults();
+		}
+
+		if (parent.RecordTest){
+			var score = (correct / results.length) * 100;
+            parent.RecordTest(parseInt(score));
+        }
+
 	</script>
 </body>
 </html>
+

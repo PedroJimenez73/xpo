@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>XPO Logistics Test</title>
+    <title>XPO Logistics</title>
 	<link rel="stylesheet" href="../shared/style.css">
 	<script src="../shared/js/jquery.min.js"></script>
 	<script src="../shared/scormfunctions.js" type="text/javascript"></script>
@@ -12,16 +12,40 @@
 <body>
 	<div class="contenedor lesson condicional">
 		<div class="fila space">
-			<h1>Videotutorial</h1>
-			<button class="outline" onclick="parent.exitFullScreen();">
+			<h1>Contenidos de esta unidad</h1>
+			<button class="outline" onclick="parent.exitFullScreen(); parent.goProgress();">
 				Salir
 			</button>
 		</div>
 		<div class="fila">
-			<p>Visualiza el siguiente videotutorial.</p>
+			<p>Visualiza el siguiente video</p>
 		</div>
 		<div class="fila">
-			<video controls src="https://tableulms.s3-eu-west-1.amazonaws.com/Videotutorial01.mp4"></video>
+			<video controls src="https://xpologistics.s3-us-west-2.amazonaws.com/V1+Descripcio%CC%81n+Mesa+Packaging.mp4"></video>
+		</div>
+		<div class="fila">
+			<div class="accordion">
+				<section>
+					<div class="head-info" onclick="toggleContent(1)">
+						<img class="plus" src="../shared/img/267-plus.svg"> <img class="minus" src="../shared/img/268-minus.svg">
+						<span> <img src="../shared/img/accessible.svg" alt=""> Transcripción </span>
+						<img class="arrow" src="../shared/img/324-down.svg">
+					</div>
+					<div class="content-info">
+						<p>Os presentamos en este vídeo vuestro espacio de trabajo: la mesa de packing estándar.</p>
+						<p>La mesa de packing estándar está compuesta por:</p>
+						<p>Un ordenador, desde el que realizaremos varias acciones del proceso de packing, (pausa) un scanner para identificar  los artículos, (pausa) una impresora de etiquetas de expedición, (pausa) una engomadora que nos proporciona la cinta de cierre de las cajas,  (pausa) una impresora de facturas,  (pausa) la cinta transportadora donde depositaremos los artículos una vez finalizado su empaquetamiento y finalmente, el dispensador de papel de relleno para las cajas.</p>
+						<p>También dispondremos de todos los consumibles necesarios para llevar a cabo nuestra actividad.: Papel de relleno, (pausa) etiquetas de expedición, (pausa) cinta para el cierre de las cajas, (pausa)folios,  (pausa)etiquetas de “material peligroso” (pausa), etiquetas de soporte 2222 (dos dos dos dos) y cajas para el empaquetado de los artículos.</p>
+						<p>Además de los productos de limpieza necesarios para dejar nuestro puesto de trabajo tal y como le hemos encontrado: Limpio y ordenado.</p>
+						<p>Sí  necesitamos más consumibles, si vemos que alguno de los equipos de nuestra mesa de packing estándar no funciona correctamente, hay algún problema relacionado con los artículos y su escaneado, o si tenemos alguna duda sobre el proceso,   deberemos avisar siempre al personal de apoyo sin abandonar nuestro puesto de trabajo. Si el personal de apoyo no puede solucionar el problema, se dará aviso al personal de soporte. </p>
+						<p>Bajo ningún concepto intentaremos solucionar ni manipular por nuestra cuenta atascos en impresoras, engomadoras, etcétera, con cutter (cuter) y otros utensilios que puedan dañar los equipos.</p>
+						<p>Recuerda, en este video hemos aprendido:</p>
+						<p>Qué elementos tiene una mesa de packing estándar.</p>
+						<p>Cómo actuar si surge algún problema.</p>
+						<p>Visiona este video hasta familiarizarte con sus contenidos antes de realizar las actividades.</p>	
+					</div>
+				</section>																																																																															
+			</div>
 		</div>
 	</div>
 	<nav>
@@ -38,7 +62,19 @@
 	</nav>
 	<script>
 		document.getElementById('counter');
-		counter.innerHTML = (parent.currentPage + 1) + " / " + parent.pageArray.length;
+		counter.innerHTML = (parent.currentPage + 1) + " / " + (parent.pageArray.length - 2);
+	
+		function toggleContent(e) {
+			e--
+			$(".content-info").eq(e).slideToggle(700);
+			$(".plus").eq(e).toggleClass('open');
+			$(".minus").eq(e).toggleClass('open');
+			$(".arrow").eq(e).toggleClass('open');
+			// let elemTop = ($('.head-info').eq(e -1).offset().top) - 140;
+			// $('html,body').animate({scrollTop: elemTop});
+		}
+
 	</script>	
+
 </body>
 </html>

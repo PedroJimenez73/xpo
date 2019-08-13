@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>XPO Logistics Test</title>
+    <title>XPO Logistics</title>
     <script src="js/jquery.min.js"></script>
     <script src="scormfunctions.js" type="text/javascript"></script>
     <link rel="stylesheet" href="style.css">
@@ -13,64 +13,41 @@
 
     <iframe style="width: 100%; height: 100vh" id="contentFrame" src="" frameBorder="0" allowfullscreen></iframe>
 
-    <div id="modal-resume">
+    <!-- <div id="modal-resume">
         <span>&times;</span>
         <p>¿Deseas volver a la última pantalla que visitaste?</p>
         <div>
             <button class="outline m-r-1em" onclick="startCourse(); fullScreen();">No</button>
             <button onclick="resumeCourse(); fullScreen();">Si</button>
         </div>
-    </div>
+    </div> -->
 
     <script type="text/javascript">
-    
-    /*************************************/
-    //functions for sizing the iFrame
-    /*************************************/
-    function setIframeHeight(id, navWidth) {
-        if ( document.getElementById ) {
-            var theIframe = document.getElementById(id);
-            if (theIframe) {
-                var height = getWindowHeight();
-                theIframe.style.height = Math.round( height ) - navWidth + "px";
-                theIframe.style.marginTop = Math.round( ((height - navWidth) - parseInt(theIframe.style.height) )/2 ) + "px";
-            }
-        }
-    }
 
-    function getWindowHeight() {
-        var height = 0;
-        if (window.innerHeight){
-            height = window.innerHeight - 18;
-        }
-        else if (document.documentElement && document.documentElement.clientHeight){
-            height = document.documentElement.clientHeight;
-        }
-        else if (document.body && document.body.clientHeight) {
-            height = document.body.clientHeight;
-        }
-        return height;
-    }
+    // Opera 8.0+
+    var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+
+    // Firefox 1.0+
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+
+    // Safari 3.0+ "[object HTMLElementConstructor]" 
+    var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
+
+    // Internet Explorer 6-11
+    var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+    // Edge 20+
+    var isEdge = !isIE && !!window.StyleMedia;
+
+    // Chrome 1+
+    var isChrome = !!window.chrome && !!window.chrome.webstore;
+
+    // Blink engine detection
+    var isBlink = (isChrome || isOpera) && !!window.CSS;
     
-    function SetupIFrame(){
-        //set our iFrame for the content to take up the full screen except for our navigation
-        var navWidth = 40;
-        setIframeHeight("contentFrame", navWidth);
-        //need this in a setTimeout to avoid a timing error in IE6
-        window.setTimeout('window.onresize = function() { setIframeHeight("contentFrame", ' + navWidth + '); }', 1000);
-    }
+
     
-    var objetoDatos = {
-    //    intent1 : 0,
-    //    intent2 : 0,
-    //    intent3 : 0,
-    //    act1 : [],
-    //    resAct1 : [],
-    //    contFallos : 0,
-    //    passed1 : false,
-    //    resAct2 : {},
-    //    resAct3 : {},
-    }
+    var objetoDatos = {}
 
 
     /*************************************/
@@ -79,18 +56,16 @@
     var pageArray = [
         
         "contenido/portada.html",
+        "contenido/cont0.html",
         "contenido/cont1.html",
         "contenido/cont2.html",
         "contenido/cont3.html",
         "contenido/cont4.html",
         "contenido/cont5.html",
         "contenido/cont6.html",
-        // "contenido/cont7.html",
-        // "contenido/cont8.html",
-        // "contenido/cont9.html",
-        // "contenido/cont10.html",
-        // "contenido/cont11.html",
-        // "contenido/cont12.html",
+        "contenido/cont7.html",
+        "contenido/cont8.html",
+        "contenido/cont9.html",
     ]
     
         
@@ -135,7 +110,7 @@
             goToPage();
         }
         else {
-            toggleResumeModal()
+            goResume();
         }
 
         // Recuperar datos de localStorage
@@ -147,12 +122,14 @@
             localStorage.removeItem('intent1');
             localStorage.removeItem('intent2');
             localStorage.removeItem('intent3');
+            localStorage.removeItem('intent4');
             localStorage.removeItem('act1');
             localStorage.removeItem('resAct1');
             localStorage.removeItem('contFallos');
             localStorage.removeItem('passed1');
             localStorage.removeItem('resAct2');
             localStorage.removeItem('resAct3');
+            localStorage.removeItem('resAct4');
             
             if(datosLMS.intent1){
                 localStorage.setItem('intent1', JSON.stringify(datosLMS.intent1));
@@ -162,6 +139,9 @@
             }
             if(datosLMS.intent3){
                 localStorage.setItem('intent3', JSON.stringify(datosLMS.intent3));
+            }
+            if(datosLMS.intent4){
+                localStorage.setItem('intent3', JSON.stringify(datosLMS.intent4));
             }
             if(datosLMS.act1){
                 localStorage.setItem('act1', JSON.stringify(datosLMS.act1));
@@ -180,6 +160,9 @@
             }
             if(datosLMS.resAct3){
                 localStorage.setItem('resAct3', JSON.stringify(datosLMS.resAct3));
+            }
+            if(datosLMS.resAct4){
+                localStorage.setItem('resAct4', JSON.stringify(datosLMS.resAct4));
             }
         }
         
@@ -215,8 +198,11 @@
         
         //navigate the iFrame to the content
         theIframe.src = "../" + pageArray[currentPage];
-        
-        
+
+        if (isIE) {
+            theIframe.style.width = '100vw';
+        }
+
         //save the current location as the bookmark
         ScormProcessSetValue("cmi.core.lesson_location", currentPage);
         
@@ -225,7 +211,6 @@
             reachedEnd = true;
             ScormProcessSetValue("cmi.core.lesson_status", "completed");
         }
-
         
     }
 
@@ -240,6 +225,9 @@
         }
         if (localStorage.getItem('intent3')){
             objetoDatos.intent3 = JSON.parse(localStorage.getItem('intent3'));
+        }
+        if (localStorage.getItem('intent4')){
+            objetoDatos.intent3 = JSON.parse(localStorage.getItem('intent4'));
         }
         if (localStorage.getItem('act1')){
             objetoDatos.act1 = JSON.parse(localStorage.getItem('act1'));
@@ -258,6 +246,9 @@
         }
         if (localStorage.getItem('resAct3')){
             objetoDatos.resAct3 = JSON.parse(localStorage.getItem('resAct3'));
+        }
+        if (localStorage.getItem('resAct4')){
+            objetoDatos.resAct4 = JSON.parse(localStorage.getItem('resAct4'));
         }
         console.log(objetoDatos);
         objetoJSON = JSON.stringify(objetoDatos);
@@ -304,17 +295,73 @@
     }
 
     function doVideo() {
-        currentPage = 2;
+        currentPage = 3;
         goToPage();
     }
 
-    function fullScreen(){
+    function goProgress() {
+        var theIframe = document.getElementById("contentFrame");
+        
+        //navigate the iFrame to the content
+        theIframe.src = "../" + pageArray[9];
+
+        if (isIE) {
+            theIframe.style.width = '100vw';
+        }
+    }
+
+    function goResume() {
+        var theIframe = document.getElementById("contentFrame");
+        
+        //navigate the iFrame to the content
+        theIframe.src = "../" + pageArray[10];
+
+        if (isIE) {
+            theIframe.style.width = '100vw';
+        }
+    }
+
+    function reIniciar() {
+        bookmark = ScormProcessGetValue("cmi.core.lesson_location");
+        
+        //if there isn't a stored bookmark, start the user at the first page
+        if (!bookmark){
+            currentPage = 0;
+            goToPage();
+        }
+        else {
+            currentPage = bookmark;
+            goToPage();
+        }
+    }
+
+    if (isIE) {
+        console.log('IE')
+        function fullScreen() {
+            document.documentElement.msRequestFullscreen(); // IE
+        }
+        function exitFullScreen(){
+            document.msExitFullscreen();
+        }
+    } else if (isEdge) {
+        console.log('Edge')
+        function fullScreen() {
+            document.documentElement.webkitRequestFullscreen(); // IE
+        }
+        function exitFullScreen(){
+            document.webkitExitFullscreen();
+        }
+    } else {
+        console.log('Otros navegadores')
+        function fullScreen() {
             document.documentElement.requestFullscreen();
         }
 
-    function exitFullScreen(){
-        document.exitFullscreen();
+        function exitFullScreen(){
+            document.exitFullscreen();
+        }
     }
+
     
     function doExit(){
 

@@ -326,6 +326,78 @@ nav .mensaje.falso {
   color: #cc0000;
 }
 
+/* Accordion */
+.accordion {
+  margin: 20px auto;
+  width: 70%;
+}
+
+@media (max-width: 540px) {
+  .accordion {
+    width: 100%;
+  }
+}
+.accordion section {
+  margin: 1px 0 4px;
+  width: 100%;
+}
+
+.accordion section .head-info {
+  border: 1px solid #cc0000;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+}
+
+.accordion section .head-info .minus {
+  display: none;
+}
+
+.accordion section .head-info span {
+  position: relative;
+}
+
+.accordion section .head-info span img {
+  height: 22px;
+  position: absolute;
+  top: 0;
+  left: -30px;
+}
+
+.accordion section .head-info .arrow {
+  height: 30px;
+  width: 30px;
+  -webkit-transition: transform 700ms ease;
+  -moz-transition: transform 700ms ease;
+  -o-transition: transform 700ms ease;
+  transition: transform 700ms ease;
+}
+
+.accordion section .head-info .plus.open {
+  display: none;
+}
+
+.accordion section .head-info .minus.open {
+  display: inline;
+}
+
+.accordion section .head-info .arrow.open {
+  transform: rotate(180deg);
+}
+
+.accordion section .content-info {
+  display: none;
+  overflow: hidden;
+  background-color: #ededed;
+}
+
+.accordion section .content-info p {
+  font-size: 0.9em;
+  padding: 1em;
+}
+
 .badge {
   display: flex;
   justify-content: center;
@@ -552,7 +624,7 @@ button.jumbo {
   z-index: 2;
 }
 
-#mesa {
+#mesa, #mesa-tc {
   width: 75%;
   background-image: url("../../../shared/img/mesa.jpg");
   background-repeat: no-repeat;
@@ -576,7 +648,7 @@ button.jumbo {
     margin: 0 0 1em;
   }
 
-  #mesa {
+  #mesa, #mesa-tc {
     width: 100%;
   }
 
@@ -585,14 +657,14 @@ button.jumbo {
     padding: 0.3em 0.5em;
   }
 }
-.sprite {
+.sprite, .sprite-tc {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   position: absolute;
 }
 
-.sprite.success {
+.sprite.success, .sprite-tc.success {
   background-color: rgba(255, 255, 255, 0.8);
   background-image: url("../../../shared/img/check-circle.svg");
   background-size: 32px 32px;
@@ -600,7 +672,7 @@ button.jumbo {
   background-position: bottom center;
 }
 
-.sprite.fail {
+.sprite.fail, .sprite-tc.fail {
   background-color: rgba(255, 255, 255, 0.8);
   background-image: url("../../../shared/img/x-circle.svg");
   background-size: 32px 32px;
@@ -608,21 +680,24 @@ button.jumbo {
   background-position: bottom center;
 }
 
-#monitor {
+#monitor,
+#monitor-tc {
   width: 16.25%;
   height: 12.5%;
   top: 11%;
   left: 63%;
 }
 
-#teclado {
+#teclado,
+#teclado-tc {
   width: 16.25%;
   height: 10%;
   top: 23.5%;
   left: 63%;
 }
 
-#papel {
+#papel,
+#papel-tc {
   width: 18%;
   /* 270 1522  */
   height: 22%;
@@ -633,7 +708,8 @@ button.jumbo {
   /* 352 */
 }
 
-#engomadora {
+#engomadora,
+#engomadora-tc {
   width: 17%;
   /* 265 1522  */
   height: 18%;
@@ -644,7 +720,8 @@ button.jumbo {
   /* 90 */
 }
 
-#cons-peq {
+#cons-peq,
+#cons-peq-tc {
   width: 25%;
   /* 385 1522  */
   height: 27%;
@@ -655,7 +732,8 @@ button.jumbo {
   /* 0 */
 }
 
-#impr-expe {
+#impr-expe,
+#impr-expe-tc {
   width: 17%;
   /* 260 1522  */
   height: 18%;
@@ -666,7 +744,8 @@ button.jumbo {
   /* 470 */
 }
 
-#impr-fras {
+#impr-fras,
+#impr-fras-tc {
   width: 18%;
   /* 260 1522  */
   height: 26%;
@@ -677,7 +756,8 @@ button.jumbo {
   /* 754 */
 }
 
-#escaner {
+#escaner,
+#escaner-tc {
   width: 7%;
   /* 100 1522  */
   height: 12%;
@@ -688,7 +768,8 @@ button.jumbo {
   /* 1100 */
 }
 
-#cons-gra {
+#cons-gra,
+#cons-gra-tc {
   width: 15%;
   /* 230 1522  */
   height: 26%;
@@ -699,7 +780,8 @@ button.jumbo {
   /* 620 */
 }
 
-#cinta {
+#cinta,
+#cinta-tc {
   width: 21%;
   /* 230 1522  */
   height: 16%;
@@ -710,11 +792,13 @@ button.jumbo {
   /* 620 */
 }
 
-.sprite.dropping {
+.sprite.dropping,
+.sprite-tc.dropping {
   background-color: rgba(128, 128, 128, 0.6);
 }
 
-.sprite.dropped {
+.sprite.dropped,
+.sprite-tc.dropped {
   background-color: rgba(94, 94, 94, 0.831);
 }
 
@@ -779,6 +863,36 @@ label {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+div.cita {
+  border: 4px solid #989898;
+  align-items: flex-start;
+  position: relative;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+div.cita p:nth-child(1) {
+  position: absolute;
+  top: -25px;
+  left: 5px;
+  padding: 0 10px !important;
+  background-color: white;
+}
+
+div.cita p.icon {
+  position: absolute;
+  bottom: -55px;
+  right: -10px;
+  padding: 20px 10px !important;
+  background-color: white;
+}
+
+div.cita p:nth-child(1) img,
+div.cita p.icon img {
+  width: 32px;
+  height: 32px;
 }
 
 .actividades {
@@ -1091,7 +1205,7 @@ video {
 
 @media (max-width: 540px) {
   video {
-    width: 90%;
+    width: 100%;
   }
 }
 .tabs {
@@ -1210,7 +1324,7 @@ video {
   border-left: solid 5.6569px #cc0000;
 }
 .evol .fila-hex .texto {
-  width: calc(50% - 80px);
+  width: calc(100% - 80px);
   color: white;
   background-color: #cc0000;
   padding: 0.5em 1em;

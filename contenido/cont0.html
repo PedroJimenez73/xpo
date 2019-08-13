@@ -12,31 +12,27 @@
 <body>
 	<div class="contenedor lesson condicional">
 		<div class="fila space">
-			<h1>Introducción</h1>
+			<h1>Inicio</h1>
 			<button class="outline" onclick="parent.exitFullScreen(); parent.goProgress();">
 				Salir
 			</button>
 		</div>
 		<div class="fila">
 			<div class="col-50 columna">
-				<p>En la siguiente unidad aprenderemos:</p>
-				<div class="evol">
-					<div class="fader">
-						<div class="fila-hex odd">
-							<div class="hexagon"><span>1</span></div> 
-							<div class="texto">Elementos mesa de packing estándar</div>
-						</div>
-					</div>
-					<div class="fader">
-						<div class="fila-hex even">
-							<div class="texto">Como actuar si surge algún problema</div> 
-							<div class="hexagon"><span>2</span></div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-50 doble-centrada">
-				<img src="../shared/img/detalle.png" alt="">
+				<p>Bienvenido/a a esta unidad de apendizaje. A continuación te mostramos los conceptos básicos de navegación para que puedas afrontar el curso con éxito.</p>
+                <p>Cada unidad se compone de un video donde se muestran los distintos procesos que tienes que aprender y a continuación las actividades a realizar. Dispones de tres intentos en cada actividad para superarla. Repasa bien los contenidos antes de empezar las actividades.</p>
+                <div class="cita" >
+                    <p>
+                        <img src="../shared/img/alert-triangle.svg">
+                    </p>
+                    <p>
+                        Es importante que selecciones correctamente la opción de cada actividad antes de completarla para no perder uno de los tres intentos disponibles.
+                    </p>
+                </div>
+                <p class="alert"></p>
+            </div>
+			<div class="col-50 doble-centrada" style="padding: 20px;">
+				<img src="../shared/img/zenit.png" alt="">
 			</div>
 		</div>
 	</div>
@@ -56,14 +52,5 @@
 		document.getElementById('counter');
 		counter.innerHTML = (parent.currentPage + 1) + " / " + (parent.pageArray.length - 2);
 	</script>
-	<script>
-		$( document ).ready(function() {
-			$('.fader').eq(0).fadeIn(200);
-			$('.fader').eq(1).fadeIn(400);
-			$('.fader').eq(2).fadeIn(600);
-			$('.fader').eq(3).fadeIn(800);
-		});
-	</script>
-	
 </body>
 </html>
